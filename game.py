@@ -48,6 +48,9 @@ def add_to_board(row, column, player_id):
 
   turn += 1
 
+def position_available(row, column):
+  return board[row - 1][column - 1] == ''
+
 def check_winner(current_player_id):
   player = [player for player in players if player['id'] == current_player_id][0]
   mark = player['mark']

@@ -7,7 +7,7 @@ challenged_user_id = 0
 @commands.command()
 async def play(ctx, invited_user):
   global challenged_user_id
-
+  
   game.add_user(ctx.author.id, True)
   challenged_user_id = utils.get_id_from_mention(invited_user)
 
@@ -30,6 +30,10 @@ async def accept(ctx):
 async def place(ctx, row:int, column:int):
   current_player_id = game.get_current_player()['id']
 
+  if not game.position_available(row, column):
+    await ctx.send(f'Posição não disponível, escolha outra <@{ctx.author.id}>')
+    return
+
   if current_player_id == ctx.author.id:
     game.add_to_board(row - 1, column - 1, ctx.author.id)
     winner = game.check_winner(current_player_id)
@@ -49,4 +53,4 @@ async def place(ctx, row:int, column:int):
 
 @commands.command()
 async def end(ctx):
-  pass
+  game.end_game()
