@@ -7,6 +7,10 @@ challenged_user_id = 0
 @commands.command()
 async def play(ctx, invited_user):
   global challenged_user_id
+
+  if utils.get_id_from_mention(invited_user) == ctx.author.id:
+    await ctx.send('Você não pode jogar consigo mesmo!')
+    return
   
   game.add_user(ctx.author.id, True)
   challenged_user_id = utils.get_id_from_mention(invited_user)
@@ -29,6 +33,10 @@ async def accept(ctx):
 @commands.command()
 async def place(ctx, row:int, column:int):
   current_player_id = game.get_current_player()['id']
+
+  if not (1 <= row <= game.ROW_SIZE) or not (1 <= column <= game.COLUMN_SIZE):
+    await ctx.send(f'Posição inválida. Digite uma posição entre 1 e {game.COLUMN_SIZE}')
+    return
 
   if not game.position_available(row, column):
     await ctx.send(f'Posição não disponível, escolha outra <@{ctx.author.id}>')
@@ -53,4 +61,19 @@ async def place(ctx, row:int, column:int):
 
 @commands.command()
 async def end(ctx):
+  await ctx.send('Jogo finalizado!')
   game.end_game()
+
+@play.error
+async def handle_play_error(ctx, error):
+  if isinstance(error, commands.errors.MissingRequiredArgument):
+    await ctx.send('É necessário passar um usuário para jogar com você!')
+  elif isinstance(error, commands.errors.CommandInvokeError):
+    await ctx.send('Usuário convidado é inválido!')
+  
+@place.error
+async def handle_place_error(ctx, error):
+  if isinstance(error, commands.errors.MissingRequiredArgument):
+    await ctx.send('Passe a posição desejada!')
+  elif isinstance(error, commands.errors.CommandInvokeError) or isinstance(error, commands.errors.BadArgument):
+    await ctx.send('Linha ou coluna são inválidos!')
