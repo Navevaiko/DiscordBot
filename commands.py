@@ -8,10 +8,15 @@ challenged_user_id = 0
 async def play(ctx, invited_user):
   global challenged_user_id
 
+  if game.game_state != 0:
+    await ctx.send('Há um jogo em andamento, utilize o comando !end para finalizar o jogo')
+    return
+
   if utils.get_id_from_mention(invited_user) == ctx.author.id:
     await ctx.send('Você não pode jogar consigo mesmo!')
     return
-  
+
+  game.game_state = 1
   game.add_user(ctx.author.id, True)
   challenged_user_id = utils.get_id_from_mention(invited_user)
 
@@ -19,6 +24,8 @@ async def play(ctx, invited_user):
 
 @commands.command()
 async def accept(ctx):
+  global challenged_user_id
+
   if ctx.author.id == challenged_user_id:
     game.add_user(ctx.author.id, True)
     game.init_game()
@@ -29,10 +36,16 @@ async def accept(ctx):
     await ctx.send(f'Vez do <@{current_player_id}>. Use o comando !place [linha] [coluna] para jogar')
 
     await game.print_board(ctx)
+  else:
+    await ctx.send('Você não tem nenhum desafio para aceitar!')
 
 @commands.command()
 async def place(ctx, row:int, column:int):
   current_player_id = game.get_current_player()['id']
+
+  if game.game_state == 0:
+    await ctx.send('Não há um jogo em andamento, utilize o comando !end para finalizar o jogo')
+    return
 
   if not (1 <= row <= game.ROW_SIZE) or not (1 <= column <= game.COLUMN_SIZE):
     await ctx.send(f'Posição inválida. Digite uma posição entre 1 e {game.COLUMN_SIZE}')
@@ -47,6 +60,11 @@ async def place(ctx, row:int, column:int):
     winner = game.check_winner(current_player_id)
     
     await game.print_board(ctx)
+
+    if game.turn == 9:
+      await ctx.send(f'Deu velha!!')
+      game.end_game()
+      return
 
     if winner != None:
       winner_id = winner['id']

@@ -1,5 +1,3 @@
-import utils
-
 ROW_SIZE=3
 COLUMN_SIZE=3
 MARKS = [':regional_indicator_x:', ':o2:']
@@ -7,6 +5,7 @@ MARKS = [':regional_indicator_x:', ':o2:']
 turn = 0
 board = []
 players = []
+game_state = 0
 
 def add_user(user_id, accepted):
   players.append({
@@ -16,10 +15,10 @@ def add_user(user_id, accepted):
   })
 
 def init_game():
-  for row in range(0, 3):
+  for _ in range(0, 3):
     columns = []
 
-    for col in range(0, 3):
+    for __ in range(0, 3):
       columns.append('')
 
     board.append(columns)
@@ -81,7 +80,9 @@ def end_game():
   global board
   global players
   global turn
+  global game_state
 
   board = []
   players = []
   turn = 0
+  game_state = 0
