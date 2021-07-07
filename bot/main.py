@@ -4,7 +4,11 @@ import commands as bot_commands
 import os 
 
 load_dotenv()
-bot = commands.Bot(command_prefix='!')
+
+
+COMMAND_PREFIX = '!' if os.getenv('ENVIROMENT') == 'production' else '#'
+
+bot = commands.Bot(command_prefix=COMMAND_PREFIX)
 
 bot.add_command(bot_commands.play)
 bot.add_command(bot_commands.accept)
