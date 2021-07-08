@@ -1,10 +1,17 @@
+from pretty_help import PrettyHelp
 from discord.ext import commands
-from dotenv import load_dotenv
 import commands as bot_commands
-import os 
+from dotenv import load_dotenv
+import os
+
+ENDING_NOTE = '''Digite #help command para mais informações sobre o comando.'''
 
 load_dotenv()
-bot = commands.Bot(command_prefix='!')
+
+
+COMMAND_PREFIX = '!' if os.getenv('ENVIROMENT') == 'production' else '#'
+
+bot = commands.Bot(command_prefix=COMMAND_PREFIX, help_command=PrettyHelp(ending_note=ENDING_NOTE, show_index=False, no_category='Geral'))
 
 bot.add_command(bot_commands.play)
 bot.add_command(bot_commands.accept)

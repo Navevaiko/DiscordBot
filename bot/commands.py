@@ -8,6 +8,9 @@ channel = ''
 
 @commands.command()
 async def play(ctx, invited_user):
+  '''
+    Convida usuário para uma partida
+  '''
   global challenged_user_id
 
   if game.game_state != 0:
@@ -26,6 +29,9 @@ async def play(ctx, invited_user):
 
 @commands.command()
 async def accept(ctx):
+  '''
+    Aceita o desafio (se houver algum)
+  '''
   global challenged_user_id
   global channel
 
@@ -47,6 +53,9 @@ async def accept(ctx):
 
 @commands.command()
 async def place(ctx, row:int, column:int):
+  '''
+    Coloca a marca do usuário na posição informada 
+  '''
   global channel
   
   current_player_id = game.get_current_player()['id']
@@ -87,6 +96,9 @@ async def place(ctx, row:int, column:int):
 
 @commands.command()
 async def end(ctx):
+  '''
+    Finaliza o jogo e remove o canal de texto criado
+  '''
   await channel.send('Jogo finalizado!')
   await channel.delete()
   game.end_game()
