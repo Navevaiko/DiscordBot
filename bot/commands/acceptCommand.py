@@ -1,13 +1,12 @@
 from discord.ext import commands
-from context import gameContext
-from models.GameModel import Game
+import random
 
 @commands.command()
 async def accept(ctx):
   '''
     Aceita o desafio (se houver algum)
   '''
-  game = gameContext.get()
+  game = ctx.bot.game
 
   if ctx.author.id == game.challenged_user_id:
     channel_name = f'game-{random.randint(1, 1000)}'
@@ -20,7 +19,8 @@ async def accept(ctx):
 
     await game.channel.send('Iniciando jogo')
     await game.channel.send(f'Vez do <@{current_player_id}>. Use o comando !place [linha] [coluna] para jogar')
-
+    
     await game.print_board()
+    ctx.bot.game = game
   else:
     await ctx.send('Você não tem nenhum desafio para aceitar!')
