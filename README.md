@@ -3,10 +3,11 @@
 Bot feito para o discord para gerenciar uma partida de Jogo da Velha entre dois usuários
 
 ## Comandos
-- ``!play NOME_USUARIO``: Inicia o jogo contra o usuário informado
+- ``!play <usuario>``: Inicia o jogo contra o usuário informado
 - ``!accept``: Aceita o convite para um jogo
-- ``!place LINHA COLUNA``: Coloca sua marca na posição informada
+- ``!place <linha> <coluna>``: Coloca sua marca na posição informada
 - ``!end``: Finaliza um jogo iniciado
+- ``!help <comando>``: Exibe mais informações sobre o comando
 
 ## Como desenvolver:
 - Baixe o projeto
