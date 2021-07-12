@@ -1,0 +1,22 @@
+{
+    "PLAY_SAME_PLAYER_ERROR":  "Você não pode jogar consigo mesmo!",
+    "PLAY_IN_PROGRESS_GAME_ERROR":  "Há um jogo em andamento, utilize o comando !end para finalizar o jogo",
+    "PLAY_CHALLEGING_MESSAGE": "{} o usuário <@{}> está te desafiando para uma partida de Jogo da Velha!\nPara aceitar use o comando !accept",
+    "PLAY_MISSING_PARAM_ERROR": "É necessário passar um usuário para jogar com você!",
+    "PLAY_INVALID_PARAM_ERROR": "Usuário convidado é inválido!",
+    "ACCEPT_INITIATING_GAME_MESSAGE": "Iniciando jogo",
+    "ACCEPT_TURN_MESSAGE": "Vez do <@{}>. Use o comando !place <linha> <coluna> para jogar",
+    "ACCEPT_NO_CHALLENGE": "Você não tem nenhum desafio para aceitar!",
+    "PLACE_NO_ONGOING_GAME_ERROR": "Não há um jogo em andamento, utilize o comando !play <usuario> para iniciar um novo",
+    "PLACE_INVALID_POSITION_ERROR": "Posição inválida. Digite uma posição entre 1 e {}",
+    "PLACE_UNAVAILABLE_POSITION_ERROR": "Posição não disponível, escolha outra <@{}>",
+    "PLACE_TIE_MESSAGE": "Deu velha!!",
+    "PLACE_WIN_MESSAGE": "<@{}> ganhou!!",
+    "PLACE_NOT_YOUR_TURN": "Não é sua vez <@{}>",
+    "PLACE_MISSING_PARAM_ERROR": "Passe a posição desejada!",
+    "PLACE_INVALID_PARAM_ERROR": "Linha ou coluna são inválidos!",
+    "END_FINISH_GAME_MESSAGE": "Jogo finalizado!",
+    "CONFIG_INVALID_OPTION": "Opção indisponível! Informe uma opção válida",
+    "CONFIG_LANGUAGE_CHANGED": "Idioma alterada com sucesso!",
+    "CONFI_MISSING_PARAM_ERROR": "É necessária passar uma opção e um valor!"
+}

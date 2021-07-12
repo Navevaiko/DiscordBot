@@ -7,28 +7,34 @@ async def play(ctx, invited_user):
   '''
     Convida usuário para uma partida
   '''
+  messages = ctx.bot.messages
   challenged_user_id = utils.get_id_from_mention(invited_user)
 
   if challenged_user_id == ctx.author.id:
-    await ctx.send('Você não pode jogar consigo mesmo!')
+    await ctx.send(messages.PLAY_SAME_PLAYER_ERROR.value)
     return
   
   game = Game(challenged_user_id)
 
   if game.state != 0:
-    await ctx.send('Há um jogo em andamento, utilize o comando !end para finalizar o jogo')
+    await ctx.send(messages.IN_PROGRESS_GAME_ERROR.value)
     return
 
   game.add_user(ctx.author.id)
   
   ctx.bot.game = game
-  await ctx.send(f'{invited_user} o usuário <@{ctx.author.id}> está te desafiando para uma partida de Jogo da Velha!\nPara aceitar use o comando !accept')
+  final_message = messages.PLAY_CHALLEGING_MESSAGE.value.format(
+      invited_user, 
+      ctx.author.id
+  )
+  await ctx.send(final_message)
 
 @play.error
 async def handle_play_error(ctx, error):
-  print(error)
+  messages = ctx.bot.messages
+  
   if isinstance(error, commands.errors.MissingRequiredArgument):
-    await ctx.send('É necessário passar um usuário para jogar com você!')
+    await ctx.send(messages.PLAY_MISSING_PARAM_ERROR.value)
   elif isinstance(error, commands.errors.CommandInvokeError):
-    await ctx.send('Usuário convidado é inválido!')
+    await ctx.send(messages.PLAY_INVALID_PARAM_ERROR.value)
   

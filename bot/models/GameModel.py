@@ -83,9 +83,3 @@ class Game():
       return player
 
     return None
-
-  def end_game(self):
-    self.board = []
-    self.players = []
-    self.turn = 0
-    self.state = 0

@@ -2,5 +2,6 @@ from commands.playCommand import play
 from commands.acceptCommand import accept
 from commands.placeCommand import place
 from commands.endCommand import end
+from commands.configCommand import config
 
-_all__ = (play, accept, place, end)
+_all__ = (play, accept, place, end, config)

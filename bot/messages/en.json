@@ -1,0 +1,22 @@
+{
+  "PLAY_SAME_PLAYER_ERROR":  "You cannot play with yourself!",
+  "PLAY_IN_PROGRESS_GAME_ERROR":  "There is a game in progress, use the commando !end to end the game",
+  "PLAY_CHALLEGING_MESSAGE": "{} the user <@{}> is challenging you to a match of Tic Tac Toe!\nTo accept use the command !accept",
+  "PLAY_MISSING_PARAM_ERROR": "A user is required to play with you!",
+  "PLAY_INVALID_PARAM_ERROR": "Invited user is invalid",
+  "ACCEPT_INITIATING_GAME_MESSAGE": "Starting the game",
+  "ACCEPT_TURN_MESSAGE": "It's <@{}> turn. Use the command !place <row> <column> to play",
+  "ACCEPT_NO_CHALLENGE": "You have no game to accept!",
+  "PLACE_NO_ONGOING_GAME_ERROR": "There is no game in progress, use the commando !play <user> to start one",
+  "PLACE_INVALID_POSITION_ERROR": "Invalid position. Type a position between 1 and {}",
+  "PLACE_UNAVAILABLE_POSITION_ERROR": "Unavailable position, pick another <@{}>",
+  "PLACE_TIE_MESSAGE": "It's a tie!!",
+  "PLACE_WIN_MESSAGE": "<@{}> won!!",
+  "PLACE_NOT_YOUR_TURN": "It's not your turn <@{}>",
+  "PLACE_MISSING_PARAM_ERROR": "Type the desired position!",
+  "PLACE_INVALID_PARAM_ERROR": "Row or column are invalid!",
+  "END_FINISH_GAME_MESSAGE": "Game over!",
+  "CONFIG_INVALID_OPTION": "Unavailable option! Choose a valid one",
+  "CONFIG_LANGUAGE_CHANGED": "Language successfully changed!",
+  "CONFI_MISSING_PARAM_ERROR": "An option is required!"
+}
