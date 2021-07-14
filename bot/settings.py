@@ -13,11 +13,13 @@ def load_messages(language):
 def setup(bot):
   load_dotenv()
   
-  ending_note = '''Digite #help command para mais informações sobre o comando.'''
   command_prefix = '!' if os.getenv('ENVIROMENT') == 'production' else '#'
+
+  ending_note = f'''Digite {command_prefix}help command para mais informações sobre o comando.'''
   help_command = PrettyHelp(ending_note=ending_note, show_index=False, no_category='Geral')
 
-  bot.game = None
+  bot.pending_invites = []
+  bot.games = []
   bot.languages = ['en', 'pt-br']
   bot.messages = load_messages(os.getenv('DEFAULT_LANGUAGE'))
   bot.help_command = help_command

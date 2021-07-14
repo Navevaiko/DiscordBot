@@ -1,12 +1,22 @@
-# from context import get_value, set_value
 from discord.ext import commands
+from discord.ext.commands import context
+from utils import get_game_by_channel_name
 
 @commands.command()
 async def place(ctx, row:int, column:int):
   '''
     Coloca a marca do usuário na posição informada 
   '''
-  game = ctx.bot.game
+  if ctx.channel.topic != 'game':
+    await ctx.send('Esse canal não é o canal de um jogo')
+    return
+
+  game = get_game_by_channel_name(ctx.bot.games, ctx.channel.name)
+  
+  if game == None:
+    await ctx.send(f'Nenhum jogo encontrado entre {ctx.channel.name}')
+    return
+
   messages = ctx.bot.messages
 
   current_player_id = game.get_current_player()['id']
@@ -15,7 +25,7 @@ async def place(ctx, row:int, column:int):
     await game.channel.send(messages.PLACE_NO_ONGOING_GAME_ERROR.value)
     return
 
-  if not (1 <= row <= game.row_size) or not (1 <= column <= game.column_size):
+  if not (1 <= row <= game.ROW_SIZE) or not (1 <= column <= game.COLUMN_SIZE):
     await game.channel.send(messages.PLACE_INVALID_POSITION_ERROR.value.format(game.column_size))
     return
 
@@ -26,20 +36,16 @@ async def place(ctx, row:int, column:int):
   if current_player_id == ctx.author.id:
     game.add_to_board(row - 1, column - 1, ctx.author.id)
     winner = game.check_winner(current_player_id)
-    
-    ctx.bot.game = game
 
     await game.print_board()
 
     if game.turn == 9:
       await game.channel.send(messages.PLACE_TIE_MESSAGE.value)
-      ctx.bot.game = None
       return
 
     if winner != None:
       winner_id = winner['id']
       await game.channel.send(messages.PLACE_WIN_MESSAGE.value.format(winner_id))
-      ctx.bot.game = None
       return
   else:
     await game.channel.send(messages.PLACE_NOT_YOUR_TURN.value.format(ctx.author.id))

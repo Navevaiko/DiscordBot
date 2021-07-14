@@ -1,40 +1,34 @@
-MARKS = [':regional_indicator_x:', ':o2:']
 
 class Game():
-  id = 0
-  state = 0
-  board = []
-  turn = 0
-  players = []
-  challenged_user_id = ''
-  channel = None
-  row_size = 0
-  column_size = 0
-
-  def __init__(self, challenged_user_id, row_size = 3, column_size = 3):
-    self.challenged_user_id = challenged_user_id
-    self.row_size = row_size
-    self.column_size = column_size
   
-  def add_user(self, user_id):
-    self.players.append({
-      'id': user_id,
-      'mark': MARKS[len(self.players)]
-    })
+  MARKS = [':regional_indicator_x:', ':o2:']
+  ROW_SIZE = 3
+  COLUMN_SIZE = 3
+
+  def __init__(self, challenger, challenged_player):
+    self.id = f'{challenger.id}{challenged_player.id}'
+    self.state = 0
+    self.board = []
+    self.turn = 0
+    self.players = [
+      { 'name': challenger.name, 'id': challenger.id, 'mark': self.MARKS[0] },
+      { 'name': challenged_player.name, 'id': challenged_player.id, 'mark': self.MARKS[1] }
+    ]
+    self.channel = None
 
   def init_game(self):
     self.state = 1
 
-    for _ in range(0, self.row_size):
+    for _ in range(0, self.ROW_SIZE):
       columns = []
 
-      for __ in range(0, self.column_size):
+      for __ in range(0, self.COLUMN_SIZE):
         columns.append('')
 
       self.board.append(columns)
   
   async def print_board(self):
-    for r_index, row in enumerate(self.board):
+    for _, row in enumerate(self.board):
       columns = ''
         
       for c_index, col in enumerate(row):
@@ -68,18 +62,21 @@ class Game():
         return player
     
     # Checking columns
-    for col in range(0, self.column_size):
-      column_values = [self.board[row][col] for row in range(0, self.row_size)]
+    for col in range(0, self.COLUMN_SIZE):
+      column_values = [self.board[row][col] for row in range(0, self.ROW_SIZE)]
 
       if column_values.count(mark) == len(column_values):
         return player
       
     # Checking diagonals
     diag = [
-      [self.board[row][row] for row in range(0, self.column_size)],
-      [self.board[row][abs(row - (self.column_size - 1))] for row in range(0, self.column_size)]
+      [self.board[row][row] for row in range(0, self.COLUMN_SIZE)],
+      [self.board[row][abs(row - (self.COLUMN_SIZE - 1))] for row in range(0, self.COLUMN_SIZE)]
     ]
     if diag[0].count(mark) == len(diag[0]) or diag[1].count(mark) == len(diag[1]):
       return player
 
     return None
+  
+  def __repr__(self):
+    return f'<@{self.players[0]["name"]}> vs <@{self.players[1]["name"]}>'

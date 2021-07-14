@@ -1,6 +1,6 @@
 from discord.ext import commands
-from models.main import Game
-import utils
+from models.main import Invite
+from utils import get_game_by_players, get_id_from_mention, get_invite_by_players
 
 @commands.command()
 async def play(ctx, invited_user):
@@ -8,26 +8,27 @@ async def play(ctx, invited_user):
     Convida usuário para uma partida
   '''
   messages = ctx.bot.messages
-  challenged_user_id = utils.get_id_from_mention(invited_user)
+  challenged_user_id = get_id_from_mention(invited_user)
+  
+  await ctx.bot.fetch_user(challenged_user_id)
 
   if challenged_user_id == ctx.author.id:
     await ctx.send(messages.PLAY_SAME_PLAYER_ERROR.value)
     return
-  
-  game = Game(challenged_user_id)
 
-  if game.state != 0:
-    await ctx.send(messages.IN_PROGRESS_GAME_ERROR.value)
+  if get_game_by_players(ctx.bot.games, ctx.author.id, challenged_user_id) != None:
+    await ctx.send(messages.PLAY_IN_PROGRESS_GAME_ERROR.value)
     return
 
-  game.add_user(ctx.author.id)
+  invite = get_invite_by_players(ctx.bot.pending_invites, ctx.author.id, challenged_user_id)
+  if invite  != None:
+    await ctx.send(messages.PLAY_IN_PROGRESS_GAME_ERROR.value)
+    return
   
-  ctx.bot.game = game
-  final_message = messages.PLAY_CHALLEGING_MESSAGE.value.format(
-      invited_user, 
-      ctx.author.id
-  )
-  await ctx.send(final_message)
+  invite = Invite(ctx.author.id, challenged_user_id)
+  ctx.bot.pending_invites.append(invite)
+
+  await ctx.send(messages.PLAY_CHALLEGING_MESSAGE.value.format(invited_user, ctx.author.id))
 
 @play.error
 async def handle_play_error(ctx, error):

@@ -1,19 +1,43 @@
 from discord.ext import commands
-import random
+from utils import get_user_invites
+from models.main import Game
 
 @commands.command()
-async def accept(ctx):
+async def accept(ctx, option=0):
   '''
     Aceita o desafio (se houver algum)
   '''
-  game = ctx.bot.game
+  invites = ctx.bot.pending_invites
   messages = ctx.bot.messages
 
-  if ctx.author.id == game.challenged_user_id:
-    channel_name = f'game-{random.randint(1, 1000)}'
-    game.channel = await ctx.message.guild.create_text_channel(channel_name)
+  user_invites = get_user_invites(invites, ctx.author.id)
+  invite_index = 0
 
-    game.add_user(ctx.author.id)
+  if option != 0 and option <= len(user_invites):
+    invite_index = option - 1
+    
+  if len(user_invites) == 0:
+    await ctx.send(messages.ACCEPT_NO_CHALLENGE.value)
+    return
+  elif len(user_invites) > 1 and option == 0:
+    await ctx.send(f'Você tem {len(user_invites)} convites pendentes. Qual deseja aceitar?')
+
+    for index, invite in enumerate(user_invites):
+      await ctx.send(f'{index + 1} - <@{invite.challenger}>')
+    
+    await ctx.send('Utilize o comando !accept <opcao> para selecionar')
+    return
+
+  invite = user_invites[invite_index]
+
+  if ctx.author.id == invite.challenged_player:
+    challenger_player = await ctx.bot.fetch_user(invite.challenger)
+    challenged_player = await ctx.bot.fetch_user(invite.challenged_player)
+    
+    game = Game(challenger_player, challenged_player)
+
+    game.channel = await ctx.message.guild.create_text_channel(str(game), topic='game')
+    
     game.init_game()
 
     current_player_id = game.get_current_player()['id']
@@ -22,6 +46,11 @@ async def accept(ctx):
     await game.channel.send(messages.ACCEPT_TURN_MESSAGE.value.format(current_player_id))
     
     await game.print_board()
-    ctx.bot.game = game
+    ctx.bot.games.append(game)
+    
+    user_invite_id = f'{invite.challenger}{invite.challenged_player}'
+    user_inverted_invite_id = f'{invite.challenged_player}{invite.challenger}'
+
+    ctx.bot.pending_invites = list(filter(lambda invite: not invite.id in [user_inverted_invite_id, user_invite_id], invites))
   else:
     await ctx.send(messages.ACCEPT_NO_CHALLENGE.value)
