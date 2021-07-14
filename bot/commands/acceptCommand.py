@@ -20,12 +20,12 @@ async def accept(ctx, option=0):
     await ctx.send(messages.ACCEPT_NO_CHALLENGE.value)
     return
   elif len(user_invites) > 1 and option == 0:
-    await ctx.send(f'Você tem {len(user_invites)} convites pendentes. Qual deseja aceitar?')
+    await ctx.send(messages.ACCEPT_MULTIPLE_INVITES_QUESTION.value.format(len(user_invites)))
 
     for index, invite in enumerate(user_invites):
       await ctx.send(f'{index + 1} - <@{invite.challenger}>')
     
-    await ctx.send('Utilize o comando !accept <opcao> para selecionar')
+    await ctx.send(messages.ACCEPT_USE_COMMAND_TO_SELECT_MESSAGE.value)
     return
 
   invite = user_invites[invite_index]

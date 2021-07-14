@@ -7,17 +7,18 @@ async def place(ctx, row:int, column:int):
   '''
     Coloca a marca do usuário na posição informada 
   '''
+  messages = ctx.bot.messages
+
   if ctx.channel.topic != 'game':
-    await ctx.send('Esse canal não é o canal de um jogo')
+    await ctx.send(messages.PLACE_NOT_GAME_CHANNEL_ERROR.value)
     return
 
   game = get_game_by_channel_name(ctx.bot.games, ctx.channel.name)
   
   if game == None:
-    await ctx.send(f'Nenhum jogo encontrado entre {ctx.channel.name}')
+    await ctx.send(messages.PLACE_NO_GAME_FOUND_ERROR.value.format(ctx.channel.name))
     return
 
-  messages = ctx.bot.messages
 
   current_player_id = game.get_current_player()['id']
 
