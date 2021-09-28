@@ -14,8 +14,8 @@ async def place(ctx, row:int, column:int):
     return
 
   game = get_game_by_channel_name(ctx.bot.games, ctx.channel.name)
-  
-  if game == None:
+
+  if game is None:
     await ctx.send(messages.PLACE_NO_GAME_FOUND_ERROR.value.format(ctx.channel.name))
     return
 
@@ -57,8 +57,10 @@ async def place(ctx, row:int, column:int):
 @place.error
 async def handle_place_error(ctx, error):
   messages = ctx.bot.messages
-  
+
   if isinstance(error, commands.errors.MissingRequiredArgument):
     await ctx.send(messages.PLACE_MISSING_PARAM_ERROR.value)
-  elif isinstance(error, commands.errors.CommandInvokeError) or isinstance(error, commands.errors.BadArgument):
+  elif isinstance(
+        error,
+        (commands.errors.CommandInvokeError, commands.errors.BadArgument)):
     await ctx.send(messages.PLACE_INVALID_PARAM_ERROR.value)
