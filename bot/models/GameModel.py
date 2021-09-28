@@ -19,21 +19,18 @@ class Game():
   def init_game(self):
     self.state = 1
 
-    for _ in range(0, self.ROW_SIZE):
-      columns = []
-
-      for __ in range(0, self.COLUMN_SIZE):
-        columns.append('')
+    for _ in range(self.ROW_SIZE):
+      columns = ['' for _ in range(self.COLUMN_SIZE)]
 
       self.board.append(columns)
   
   async def print_board(self):
+    empty_char = ':white_large_square:'
     for _, row in enumerate(self.board):
       columns = ''
-        
+
       for c_index, col in enumerate(row):
         end = '' if c_index == len(row) - 1 else '  '
-        empty_char = ':white_large_square:'
         col_value = f'{col}' if col != '' else empty_char
 
         columns += f'{col_value}{end}'
@@ -60,18 +57,21 @@ class Game():
     for row in self.board:
       if row.count(mark) == len(row):
         return player
-    
+
     # Checking columns
-    for col in range(0, self.COLUMN_SIZE):
-      column_values = [self.board[row][col] for row in range(0, self.ROW_SIZE)]
+    for col in range(self.COLUMN_SIZE):
+      column_values = [self.board[row][col] for row in range(self.ROW_SIZE)]
 
       if column_values.count(mark) == len(column_values):
         return player
-      
+
     # Checking diagonals
     diag = [
-      [self.board[row][row] for row in range(0, self.COLUMN_SIZE)],
-      [self.board[row][abs(row - (self.COLUMN_SIZE - 1))] for row in range(0, self.COLUMN_SIZE)]
+        [self.board[row][row] for row in range(self.COLUMN_SIZE)],
+        [
+            self.board[row][abs(row - (self.COLUMN_SIZE - 1))]
+            for row in range(self.COLUMN_SIZE)
+        ],
     ]
     if diag[0].count(mark) == len(diag[0]) or diag[1].count(mark) == len(diag[1]):
       return player
